@@ -1,1 +1,1 @@
-#This where all the user data will be stored
+{"@make":"Toyota","@model":"Corolla","@year":"2011","@colour":"White"}{"@make":"Toyota","@model":"Kluger","@year":"2012","@colour":"white"}
