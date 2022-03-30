@@ -1,97 +1,81 @@
 require 'json'
+require 'tty-prompt'
+require 'rubocop'
+require 'oj'
+
+# car_makers_list = ["Toyota", "Honda", "Merecedes", "BMW", "Volkswagen"]
+
+# class CarDetails
+#     attr_accessor :make, :model, :pages
+#     def initialize (make, model, colour)
+#     @make = make
+#     @model = model
+#     @colour = colour
+#     end
+
+
+#     def add_booking
+#         result = prompt.collect do
+#         key(:Car).ask("Make?", required: true)
+
+#         key(:Model).ask("Model", required: true)
+
+#         key(:Colour).ask("Colour", required: true )
+#     end
+
+
+
+#     def to_json
+#         hash = {}
+#         self.instance_variables.each do |var|
+#             hash[var] = self.instance_variable_get var
+#         end
+#         hash.to_json
+#     end
+
+#     def from_json! string
+#         JSON.load(string).each do |var, val|
+#             self.instance_variable_set var, val
+#         end
+#     end
+# end
 bookings = [
-    {"@make":"Toyota","@model":"Corolla","@year":"2011","@colour":"White"},
-    {"@make":"Nissan","@model":"Micra","@year":"2012","@colour":"Yellow"},
-
+{:make => "Toyota", :model => "Corolla", :colour => "White"},
+{:make => "Nissan", :model => "Micra", :colour => "Yellow"},
 ]
-puts "What would you like to do?"
-user_input = gets.chomp
 
+loop do
 
-class CarDetails
-    attr_accessor :make, :model, :year, :pages
-    def initialize (make, model, year, colour)
-    @make = make
-    @model = model
-    @year = year
-    @colour = colour
-    end
+    prompt = TTY::Prompt.new
+    option = prompt.select("What would you like to do?", %w(view add delete exit))
 
-
-    def add_booking
-        puts "Make: "
-        car_make = gets.chomp
-        puts "Model: "
-        car_model = gets.chomp
-        puts "Year: "
-        car_year = gets.chomp
-        puts "Colour: "
-        car_color = gets.chomp
-        new_car = CarDetails.new(car_make, car_model, car_year, car_color)
-        new_car = new_car.to_json
-        bookings = bookings.push(new_car)
-    end
-
-
-    def to_json
-        hash = {}
-        self.instance_variables.each do |var|
-            hash[var] = self.instance_variable_get var
-        end
-        hash.to_json
-    end
-
-    def from_json! string
-        JSON.load(string).each do |var, val|
-            self.instance_variable_set var, val
-        end
-    end
-end
-
-    def add_booking
-        puts "Make: "
-        car_make = gets.chomp
-        puts "Model: "
-        car_model = gets.chomp
-        puts "Year: "
-        car_year = gets.chomp
-        puts "Colour: "
-        car_color = gets.chomp
-        new_car = CarDetails.new(car_make, car_model, car_year, car_color)
-        new_car = new_car.to_json
-        bookings = bookings.push(new_car)
-    end
-
-
-while user_input != "quit"
-    case user_input
+    case option
     when "add"
-        puts "Make: "
-        car_make = gets.chomp
-        puts "Model: "
-        car_model = gets.chomp
-        puts "Year: "
-        car_year = gets.chomp
-        puts "Colour: "
-        car_color = gets.chomp
-        new_car = CarDetails.new(car_make, car_model, car_year, car_color)
-        p new_car
-        new_car = new_car.to_json
-        bookings = bookings.push(new_car)
-        break
+        result = prompt.collect do
+        key(:Car).ask("Make?", required: true)
+
+        key(:Model).ask("Model", required: true)
+
+        key(:Colour).ask("Colour", required: true )
+        end
+        puts "you have added #{result}"
+        bookings.push(result)
+        puts bookings
+        
     when "view"
         puts "Your current booking is: "
+        
         bookings.each_with_index do |booking, index|
             puts "#{index+1}: #{booking}"
         end
 
-  
-    puts "What would you like to do?"
-    user_input = gets.chomp
-
 
     when "delete"
-        puts "what index would you like to delete?"
+        choices = %w(emacs nano vim)
+        prompt.enum_select("Select an item to delete?", choices)
+
+    when "exit"
+        break
     end
 end
 
