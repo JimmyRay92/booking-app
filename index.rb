@@ -70,13 +70,21 @@ loop do
     when "delete"
         puts "Select a index to delete: "
         index = gets.chomp.to_i
+        if index == 0
+            puts "invalid selection"
+        elsif index > bookings.length
+            puts "item does not exist"
+        else
         deleted = bookings.slice!(index - 1)
         puts "you have deleted #{deleted}"
         File.write('bookings.json', JSON.pretty_generate(bookings))
-
+        end
+        
     when "exit"
         break
     end
 end
+
+
 
 puts "thank you for using our app"
