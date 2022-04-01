@@ -13,7 +13,6 @@ require 'oj'
 #     @colour = colour
 #     end
 
-
 #     def add_booking
 #         result = prompt.collect do
 #         key(:Car).ask("Make?", required: true)
@@ -22,8 +21,6 @@ require 'oj'
 
 #         key(:Colour).ask("Colour", required: true )
 #     end
-
-
 
 #     def to_json
 #         hash = {}
@@ -39,28 +36,29 @@ require 'oj'
 #         end
 #     end
 # end
+
 bookings = [
-{:make => "Toyota", :model => "Corolla", :colour => "White"},
-{:make => "Nissan", :model => "Micra", :colour => "Yellow"},
+  {make: "Toyota", model: "Corolla", colour: "White"},
+  {make: "Nissan", model: "Micra", colour: "Yellow"},
 ]
 
 loop do
-
     prompt = TTY::Prompt.new
     option = prompt.select("What would you like to do?", %w(view add delete exit))
 
     case option
     when "add"
         result = prompt.collect do
-        key(:Car).ask("Make?", required: true)
+            key(:make).ask("Make?", required: true)
 
-        key(:Model).ask("Model", required: true)
+            key(:model).ask("Model?", required: true)
 
-        key(:Colour).ask("Colour", required: true )
-        end
+            key(:colour).ask("Colour?", required: true )
+    end
         puts "you have added #{result}"
-        bookings.push(result)
-        puts bookings
+        bookings.push(result)  
+        # bookings << results
+        # return result
         
     when "view"
         puts "Your current booking is: "
@@ -69,10 +67,11 @@ loop do
             puts "#{index+1}: #{booking}"
         end
 
-
     when "delete"
-        choices = %w(emacs nano vim)
-        prompt.enum_select("Select an item to delete?", choices)
+        puts "Select a index to delete: "
+        index = gets.chomp.to_i
+        deleted = bookings.slice!(index - 1)
+        puts "you have deleted #{deleted}"
 
     when "exit"
         break
