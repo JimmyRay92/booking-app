@@ -37,14 +37,15 @@ require 'oj'
 #     end
 # end
 
-bookings = [
-  {make: "Toyota", model: "Corolla", colour: "White"},
-  {make: "Nissan", model: "Micra", colour: "Yellow"},
-]
+# bookings = [
+#   {make: "Toyota", model: "Corolla", colour: "White"},
+#   {make: "Nissan", model: "Micra", colour: "Yellow"},
+# ]
 
 loop do
     prompt = TTY::Prompt.new
     option = prompt.select("What would you like to do?", %w(view add delete exit))
+    bookings = JSON.load_file('bookings.json', symbolize_names: true)
 
     case option
     when "add"
@@ -56,9 +57,8 @@ loop do
             key(:colour).ask("Colour?", required: true )
     end
         puts "you have added #{result}"
-        bookings.push(result)  
-        # bookings << results
-        # return result
+        bookings << result 
+        File.write('bookings.json', JSON.pretty_generate(bookings))
         
     when "view"
         puts "Your current booking is: "
@@ -72,6 +72,7 @@ loop do
         index = gets.chomp.to_i
         deleted = bookings.slice!(index - 1)
         puts "you have deleted #{deleted}"
+        File.write('bookings.json', JSON.pretty_generate(bookings))
 
     when "exit"
         break
