@@ -1,7 +1,15 @@
-require 'json'
-require 'tty-prompt'
-require 'rubocop'
-require 'rspec'
+begin
+    require 'json'
+    require 'tty-prompt'
+    require 'rubocop'
+    require 'rspec'
+rescue LoadError
+    puts 'There has been an error loading the necessary dependencies'
+    puts "Please:
+        1. navigate to the root directory of this application
+        2. run the program again."
+    exit!
+end
 
 begin
     # CLI arguments
@@ -25,26 +33,15 @@ begin
         end
         exit
     end
+
+class CarDetails
+    attr_accessor :make, :model, :pages
+    def initialize (make, model, colour)
+    @make = make
+    @model = model
+    @colour = colour
+    end
 end
-
-# car_makers_list = ["Toyota", "Honda", "Merecedes", "BMW", "Volkswagen"]
-
-# class CarDetails
-#     attr_accessor :make, :model, :pages
-#     def initialize (make, model, colour)
-#     @make = make
-#     @model = model
-#     @colour = colour
-#     end
-
-#     def add_booking
-#         result = prompt.collect do
-#         key(:Car).ask("Make?", required: true)
-
-#         key(:Model).ask("Model", required: true)
-
-#         key(:Colour).ask("Colour", required: true )
-#     end
 
 #     def to_json
 #         hash = {}
@@ -61,41 +58,45 @@ end
 #     end
 # end
 
-# bookings = [
-#   {make: "Toyota", model: "Corolla", colour: "White"},
-#   {make: "Nissan", model: "Micra", colour: "Yellow"},
-# ]
-class InvalidSelectionError < StandardError
-    def message
-        return "Selection must not be empty"
-    end
+
+# def view_bookings
+#     bookings.each_with_index do |booking, index|
+#     puts "#{index+1}: #{booking}"
+# end
+def file_writing(book)
+    File.write('bookings.json', JSON.pretty_generate(book))
 end
+
+def prints_view_information
+    puts "Your current booking is:"
+end
+
+
 
 loop do
     bookings = JSON.load_file('bookings.json', symbolize_names: true)
-    prompt = TTY::Prompt.new(interrupt: :exit)
+    prompt = TTY::Prompt.new
     input = prompt.select("What would you like to do?", %w(view add delete exit)) 
     
 
     case input
     when "add"
         new_booking = prompt.collect do
-            key(:make).ask("Make?", required: true)
+            key(:make).ask("Enter a make?", required: true)
 
-            key(:model).ask("Model?", required: true)
+            key(:model).ask("Enter a model?", required: true)
 
-            key(:colour).ask("Colour?", required: true)
+            key(:colour).ask("Enter a colour?", required: true)
         end
         puts "you have added #{new_booking}"
         bookings << new_booking
-        File.write('bookings.json', JSON.pretty_generate(bookings))
+        file_writing(bookings)
         
     when "view"
-        puts "Your current booking is: "
-        
-        bookings.each_with_index do |booking, index|
-            puts "#{index+1}: #{booking}"
-        end
+            prints_view_information
+            bookings.each_with_index do |booking, index|
+                puts "#{index+1}: #{booking}"
+            end
 
     when "delete"
         puts "Select a index to delete: "
@@ -107,7 +108,7 @@ loop do
         else
         deleted = bookings.slice!(index - 1)
         puts "you have deleted #{deleted}"
-        File.write('bookings.json', JSON.pretty_generate(bookings))
+        file_writing(bookings)
         end
         
     when "exit"
@@ -115,5 +116,8 @@ loop do
     end
 end
 
-
-puts "thank you for using our app"
+rescue Interrupt
+    puts ' You ended the program!'
+rescue Errno::ENOENT
+    puts 'Internal File Not Found'
+end
