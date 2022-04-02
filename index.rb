@@ -1,7 +1,31 @@
 require 'json'
 require 'tty-prompt'
 require 'rubocop'
-require 'oj'
+require 'rspec'
+
+begin
+    # CLI arguments
+    arguments = ARGV
+    case
+    when ( arguments & ['--h', '--help']).any?
+        File.foreach('./help.txt') do |line|
+            puts line
+        end
+        exit
+    when (arguments & ['--a', '--about']).any?
+        File.foreach('./help.txt') do |line|
+            puts line
+        end
+        exit
+    when (arguments & ['--g', '--gems']).any?
+        File.foreach('./Gemfile') do |line|
+            if line.include?('gem')
+                puts line
+            end
+        end
+        exit
+    end
+end
 
 # car_makers_list = ["Toyota", "Honda", "Merecedes", "BMW", "Volkswagen"]
 
@@ -41,23 +65,29 @@ require 'oj'
 #   {make: "Toyota", model: "Corolla", colour: "White"},
 #   {make: "Nissan", model: "Micra", colour: "Yellow"},
 # ]
+class InvalidSelectionError < StandardError
+    def message
+        return "Selection must not be empty"
+    end
+end
 
 loop do
-    prompt = TTY::Prompt.new
-    option = prompt.select("What would you like to do?", %w(view add delete exit))
     bookings = JSON.load_file('bookings.json', symbolize_names: true)
+    prompt = TTY::Prompt.new(interrupt: :exit)
+    input = prompt.select("What would you like to do?", %w(view add delete exit)) 
+    
 
-    case option
+    case input
     when "add"
-        result = prompt.collect do
+        new_booking = prompt.collect do
             key(:make).ask("Make?", required: true)
 
             key(:model).ask("Model?", required: true)
 
-            key(:colour).ask("Colour?", required: true )
-    end
-        puts "you have added #{result}"
-        bookings << result 
+            key(:colour).ask("Colour?", required: true)
+        end
+        puts "you have added #{new_booking}"
+        bookings << new_booking
         File.write('bookings.json', JSON.pretty_generate(bookings))
         
     when "view"
@@ -84,7 +114,6 @@ loop do
         break
     end
 end
-
 
 
 puts "thank you for using our app"
