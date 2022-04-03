@@ -1,6 +1,6 @@
 #!/bin/bash
-bundle install
+gem install bundler
 
-clear
+bundle install
 
 ruby index.rb
