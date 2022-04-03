@@ -13,28 +13,32 @@ rescue LoadError
 end
 
 # Car class for a new booking
-class CarDetails
+class Car
   attr_accessor :make, :model, :pages
 
   def initialize(make, model, colour)
-    @list = []
+    @booking_list = []
     @make = make
     @model = model
     @colour = colour
   end
 
-  def to_json
-    hash = {}
-    self.instance_variables.each do |var|
-      hash[var] = self.instance_variable_get var
-    end
-    hash.to_json
+  def add_booking
+    puts 'Make?'
+    make = gets.chomp
+    puts 'Model?'
+    model = gets.chomp
+    puts 'Colour?'
+    colour = gets.chomp
+    new_booking = Car.new(make, model, colour)
   end
 
-  def from_json!(string)
-    JSON.parse(string).each do |var, val|
-      self.instance_variable_set var, val
-    end
+  def view_booking
+    puts @booking_list
+  end
+
+  def delete_booking(index)
+    del = @booking_list.delete(index)
   end
 end
 
@@ -46,8 +50,12 @@ def prints_view_information
   puts 'Your current booking is:'
 end
 
+def prints_no_booking
+  puts 'You have no bookings left'
+end
+
 begin
-  # CLI arguments
+  # ARGV arguments
   arguments = ARGV
   case
   when (arguments & ['--h', '--help']).any?
@@ -62,8 +70,8 @@ begin
     exit
   when (arguments & ['--g', '--gems']).any?
     File.foreach('./Gemfile') do |line|
-    if line.include?('gem')
-      puts line
+      if line.include?('gem')
+        puts line
     end
     end
     exit
@@ -97,7 +105,7 @@ begin
     when 'view'
       begin
         if bookings.length.zero?
-          puts 'You have no bookings left'
+          prints_no_booking
         else
           prints_view_information
           bookings.each_with_index do |booking, index|
