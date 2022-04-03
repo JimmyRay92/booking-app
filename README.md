@@ -12,7 +12,7 @@ This is a simple booking app that allows you to track all your car detailing boo
 
 
 ## Dependencies
-This application is developed in Ruby, and requires Ruby to be installed to run. If you wish to install Ruby head over to [ruby](https://www.ruby-lang.org/en/downloads/).
+This application is developed in Ruby, and requires the latest version of Ruby to be installed to run. If you wish to install Ruby head over to [ruby org](https://www.ruby-lang.org/en/downloads/).
 Below are the dependencies required by running the app. It will be downloaded and installed for you when you run the script file.
 
 - tty -prompt 0.23.1
