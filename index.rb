@@ -97,12 +97,12 @@ loop do
             puts "you have added #{new_booking}"
             bookings << new_booking
             file_writing(bookings)
-        rescue
-            puts "unexcepted error"
-            retry
+        rescue NameError
+            puts "There may be a problem loading the json file, please restart the program"
         end
         
     when "view"
+        begin
             if bookings.length == 0
                 puts "You have no bookings left"
             else  
@@ -111,6 +111,9 @@ loop do
                     puts "#{index+1}: #{booking}"
                 end
             end
+        rescue NameError
+            puts "There may be a problem loading the json file, please restart the program"
+        end
 
     when "delete"
         begin
@@ -126,7 +129,7 @@ loop do
             file_writing(bookings)
             end
         rescue 
-            puts "wrong type, or answer cannot be empty"
+            puts "index cannot be empty"
             retry
         end
     when "exit"
@@ -135,7 +138,7 @@ loop do
 end
 
 rescue JSON::ParserError
-    puts 'unexcepted error in json file'
+    puts 'unexcepted error in json file, please restart the program'
 rescue Interrupt
     puts ' You ended the program!'
 rescue Errno::ENOENT
