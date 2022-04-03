@@ -10,11 +10,17 @@ describe CarDetails do
     it 'returns the make' do
         except(new_car.name) to eq 'Toyota'
 end
-                key(:make).ask("Enter a make?", required: true)
-
-                key(:model).ask("Enter a model?", required: true)
-
-                key(:colour).ask("Enter a colour?", required: true)
 
 describe add_booking do
+    it 'can a new booking' do
+    except(add_booking) to be True
+end
+
+describe view_booking do
+    it 'can view all bookings' do
+end
+
+describe delete_booking do
+    it 'can delete all bookings' do
+end
     

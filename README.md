@@ -3,15 +3,16 @@ This is a simple booking app that allows you to track all your car detailing boo
 
 
 ## Installation
-Download the folder “ ” and unzip
-Use the command line to change the directory into the unzipped folder
-Once you are in the folder, use the command line to run the script file
-The script file will download and install all dependencies that are needed for this game
-When all dependencies are installed, it will prompt you to choose an option from the menu
+1. Download the zip file from the code menu above and unzip.
+2. Use the command line to change the directory into the unzipped folder
+3. Once you are in the folder, use the command line to run the script file `./run_app.sh`
+4. The script file will download and install all dependencies that are needed for this game
+5. When all dependencies are installed, it will start the app automatically for you
+6. You will a welcome message, followed by a menu
 
 
 ## Dependencies
-This application is developed in Ruby, and requires Ruby to be installed to run. If you wish to install Ruby head over to: [ruby](https://www.ruby-lang.org/en/downloads/).
+This application is developed in Ruby, and requires Ruby to be installed to run. If you wish to install Ruby head over to [ruby](https://www.ruby-lang.org/en/downloads/).
 Below are the dependencies required by running the app. All of them will be downloaded and installed for you when you run the app in script file.
 
 - tty -prompt 0.23.1
