@@ -6,7 +6,7 @@ This is a simple booking app that allows you to track all your car detailing boo
 1. Download the zip file from the code menu above and unzip.
 2. Use the command line to change the directory into the unzipped folder
 3. Once you are in the folder, use the command line to run the script file `./run_app.sh`
-4. The script file will download and install all dependencies that are needed for this game
+4. The script file will download and install all dependencies that are needed for this app
 5. When all dependencies are installed, it will start the app automatically for you
 6. You will a welcome message, followed by a menu
 
