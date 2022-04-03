@@ -1,2 +1,17 @@
-This file contains helpful information.
-About me
+Once selected view, it shows you a list of all your current bookings.
+The numbers in front indicate which booking they are.
+Each bookings contains information about the make, model and colour of the car.
+For example Make: Toyta, Model: Corolla, Colour: White
+
+To add a new booking, select add in the menu.
+Once selected it will prompt to enter your car details by asking you questions.
+Once you are finished with each question just press enter.
+After you entered all your details, it will tell you what just added.
+And it will be saved onto a local file, so you don't lose them.
+
+To delete a booking, just view the bookings first.
+And enter a number to delete.
+For example "1" , it will delete the first booking.
+
+Finally when you feels like you are done with the app, simply select exit.
+It will exit out of the program for you. 

@@ -1,2 +1,12 @@
-This is a about file.
-Helpful tips
+This file contains information to help you get the most out of this application.
+You have four options in the menu.
+Use the arrow key to choose a menu item.
+Press enter to select that item.
+
+This app is about viewing all your bookings.
+Add a booking
+And deleting a booking
+All data will be automcatically saved, so you don't have to worry about losing your data.
+
+There is two bookings saved inside already, to show you what it looks like in the app.
+Of course you can delete them at any time. 
