@@ -3,6 +3,7 @@ begin
     require 'tty-prompt'
     require 'rubocop'
     require 'rspec'
+    require 'colorize'
 rescue LoadError
     puts 'There has been an error loading the necessary dependencies'
     puts "Please:
@@ -37,33 +38,34 @@ begin
 class CarDetails
     attr_accessor :make, :model, :pages
     def initialize (make, model, colour)
+    @list = []
     @make = make
     @model = model
     @colour = colour
     end
 end
 
-#     def to_json
-#         hash = {}
-#         self.instance_variables.each do |var|
-#             hash[var] = self.instance_variable_get var
-#         end
-#         hash.to_json
-#     end
+    def to_json
+        hash = {}
+        self.instance_variables.each do |var|
+            hash[var] = self.instance_variable_get var
+        end
+        hash.to_json
+    end
 
-#     def from_json! string
-#         JSON.load(string).each do |var, val|
-#             self.instance_variable_set var, val
-#         end
-#     end
-# end
+    def from_json! string
+        JSON.load(string).each do |var, val|
+            self.instance_variable_set var, val
+        end
+    end
+
 
 
 # def view_bookings
 #     bookings.each_with_index do |booking, index|
 #     puts "#{index+1}: #{booking}"
 # end
-bookings = JSON.load_file('bookings.json', symbolize_names: true)
+
 
 def file_writing(book)
     File.write('bookings.json', JSON.pretty_generate(book))
@@ -80,7 +82,8 @@ end
 
 loop do
     prompt = TTY::Prompt.new
-    input = prompt.select("What would you like to do?", %w(view add delete exit)) 
+    input = prompt.select("What would you like to do?", %w(view add delete exit))
+    bookings = JSON.load_file('bookings.json', symbolize_names: true)
     
 
 
@@ -88,17 +91,19 @@ loop do
     when "add"
         begin
             new_booking = prompt.collect do
-                key(:make).ask("Enter a make?", required: true)
+                key(:make).ask("Enter a make?".colorize(:light_blue), required: true)
 
-                key(:model).ask("Enter a model?", required: true)
+                key(:model).ask("Enter a model?".colorize(:light_blue), required: true)
 
-                key(:colour).ask("Enter a colour?", required: true)
+                key(:colour).ask("Enter a colour?".colorize(:light_blue), required: true)
             end
             puts "you have added #{new_booking}"
             bookings << new_booking
             file_writing(bookings)
         rescue NameError
-            puts "There may be a problem loading the json file, please restart the program"
+            puts ("There may be a problem loading the json file, please restart the program").colorize(:red)
+        rescue SyntaxError
+            puts ("There may be a problem with the file, please restart the program").colorize(:red)
         end
         
     when "view"
@@ -108,11 +113,11 @@ loop do
             else  
                 prints_view_information
                 bookings.each_with_index do |booking, index|
-                    puts "#{index+1}: #{booking}"
+                    puts ("#{index+1}: #{booking}").colorize(:light_blue)
                 end
             end
         rescue NameError
-            puts "There may be a problem loading the json file, please restart the program"
+            puts ("There may be a problem loading the json file, please restart the program").colorize(:red)
         end
 
     when "delete"
@@ -129,7 +134,7 @@ loop do
             file_writing(bookings)
             end
         rescue 
-            puts "index cannot be empty"
+            puts ("index cannot be empty").colorize(:red)
             retry
         end
     when "exit"
@@ -138,9 +143,9 @@ loop do
 end
 
 rescue JSON::ParserError
-    puts 'unexcepted error in json file, please restart the program'
+    puts ('unexcepted error in json file, please restart the program').colorize(:red)
 rescue Interrupt
-    puts ' You ended the program!'
+    puts (' You ended the program!').colorize(:red)
 rescue Errno::ENOENT
-    puts 'Internal File Not Found'
+    puts ('Internal File Not Found').colorize(:red)
 end
